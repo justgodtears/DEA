@@ -1,48 +1,66 @@
 import streamlit as st
 import polars as pl
 import duckdb
-import pydeck as pdk
 
+#Backend of app
 conn = duckdb.connect("database/medbase.db")
-query = """SELECT * FROM medbase.hospital_dict"""
+query_icd = """SELECT * FROM medbase.icd_dict"""
+query_hospital = """SELECT * FROM medbase.hospital_dict"""
 
-df = pl.read_database(query=query, connection=conn).to_pandas()
+#Dataframe from query
+df_icd = pl.read_database(query=query_icd, connection=conn)
+df_hospital = pl.read_database(query=query_hospital, connection=conn)
 
 
-st.title("Map test")
-st.subheader("Map test")
 
 
-st.pydeck_chart(
-    pdk.Deck(
-        map_style=None,  # Use Streamlit theme to pick map style
-        tooltip={"text": "{hospital_name}"},
-        initial_view_state=pdk.ViewState(
-            latitude=52.23,
-            longitude=21.01,
-            zoom=11,
-            pitch=50,
-        ),
-        layers=[
-            pdk.Layer(
-                "ScatterplotLayer",
-                df,
-                pickable=True,
-                opacity=0.8,
-                stroked=True,
-                filled=True,
-                radius_scale=6,
-                radius_min_pixels=15,
-                radius_max_pixels=250,
-                line_width_min_pixels=1,
-                get_position="[lon, lat]",
-                get_radius="exits_radius",
-                get_fill_color=[255, 140, 0],
-                get_line_color=[0, 0, 0],
-            ),
-        ],
-    )
+#Frontend of Streamlit app
+st.set_page_config(
+   page_title="Data Engineering & Analytics",
+   page_icon="🧊",
+   layout="wide",
+   initial_sidebar_state="expanded",
 )
+with st.container():
+    st.markdown("""
+        <style>
+            .container {
+                background-color: #ffffff;
+                border: 1px solid #e2e8f0;
+                border-radius: 16px;
+                padding: 24px;
+                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07);
+                max-width: 700px;
+                margin-bottom: 24px;
+            }
+            .main-title {
+                font-size: 3rem;
+                font-weight: 800;
+                letter-spacing: -0.05em;
+                color: #0f172a;
+                margin: 0;
+            }
+            .main-desc {
+                font-size: 1rem;
+                color: #64748b;
+                margin-top: 8px;
+                margin-bottom: 0;
+            }
+        </style>
+        <div class="container">
+            <h1 class="main-title">DEA</h1>
+            <p class="main-desc">An analytical database built on public Polish healthcare data (NFZ, GOV, e-Zdrowie, Ministry of Health).</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.text("ICD Dictionary - list of all diseases with polish and english descriptions")
+    st.dataframe(df_icd)
+
+    st.text("Hospital Dictionary - list of all hospitals included in datasets")
+    st.dataframe(df_hospital)
+
+    st.subheader("")
+
 
 
 
