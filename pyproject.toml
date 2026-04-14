@@ -6,6 +6,7 @@ dependencies = [
     "duckdb>=1.5.1",
     "geopy>=2.4.1",
     "polars>=1.39.3",
+    "pydeck>=0.9.1",
     "python-dotenv>=1.2.2",
     "streamlit>=1.56.0",
     "tqdm>=4.67.3",
