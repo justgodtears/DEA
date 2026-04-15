@@ -3,8 +3,7 @@ import polars as pl
 def icd_data_processing():
     """ICD-10 Data processing"""
     df = pl.read_csv('data_raw/icd1-data(pl).csv', encoding='utf-8', separator=";")
-    result = df.filter(pl.col("name18") == "EN")
-    data = result.select(
+    data = df.select(
         #Main
         pl.col("code11").alias("icd_code"),
         pl.col("ns1:name12").alias("disease_type_pl"),
@@ -103,4 +102,4 @@ def drug_registry():
 
 
 if __name__ == "__main__":
-    drug_registry()
+    icd_data_processing()
