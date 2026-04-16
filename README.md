@@ -1,4 +1,4 @@
-# DEA — Data Engineering & Analysis | Polish Healthcare Datasets
+# DEA - Data Engineering & Analysis | Polish Healthcare Datasets
 
 An analytical database built on public Polish healthcare data (NFZ, GOV, e-Zdrowie, Ministry of Health).
 
